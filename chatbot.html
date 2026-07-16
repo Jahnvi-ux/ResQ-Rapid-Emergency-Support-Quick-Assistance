@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Chatbot — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="app-shell" id="appShell">
+  <div id="sidebarSlot"></div>
+  <div id="navbarSlot"></div>
+
+  <main class="main-content" id="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">AI Assistant</span>
+        <h1 style="font-size:1.9rem;">ResQ Chatbot</h1>
+        <p>Ask about safety steps, first aid, or nearby help — available in multiple languages.</p>
+      </div>
+    </div>
+
+    <div class="chat-shell">
+      <section class="chat-panel" aria-label="Chat conversation">
+        <div class="chat-header">
+          <span class="bot-avatar" id="botAvatarIcon"></span>
+          <div>
+            <h4>ResQ Assistant</h4>
+            <span class="chat-status"><span class="badge-dot" style="background:var(--color-success);"></span>Online</span>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg msg-bot">
+            <span class="msg-avatar" style="background:var(--color-primary-light); color:var(--color-primary);">AI</span>
+            <div class="msg-bubble">Hi, I'm ResQ. I can walk you through flood, fire, earthquake, or first-aid steps, or help you find the nearest shelter. What's going on?</div>
+          </div>
+        </div>
+
+        <form class="chat-input-row" id="chatForm">
+          <input type="text" id="chatInput" placeholder="Type your question&hellip;" aria-label="Message" autocomplete="off" />
+          <button type="submit" class="chat-send" aria-label="Send message" id="sendBtn"></button>
+        </form>
+      </section>
+
+      <aside class="suggested-panel" aria-label="Suggested questions">
+        <h4>Suggested Questions</h4>
+        <button class="suggested-q" data-q="What should I do during a flood?">Flood Safety</button>
+        <button class="suggested-q" data-q="What should I do in a fire emergency?">Fire Emergency</button>
+        <button class="suggested-q" data-q="How do I stay safe during an earthquake?">Earthquake Safety</button>
+        <button class="suggested-q" data-q="Can you walk me through basic first aid?">First Aid</button>
+        <button class="suggested-q" data-q="Where is the nearest shelter?">Nearest Shelter</button>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/common.js"></script>
+<script src="js/chatbot.js"></script>
+</body>
+</html>

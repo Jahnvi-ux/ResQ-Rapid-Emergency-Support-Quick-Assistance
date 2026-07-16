@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="app-shell" id="appShell">
+  <div id="sidebarSlot"></div>
+  <div id="navbarSlot"></div>
+
+  <main class="main-content" id="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Overview</span>
+        <h1 style="font-size:1.9rem;">Good afternoon, Reeya</h1>
+        <p>Here's what's happening around your area right now.</p>
+      </div>
+      <a href="chatbot.html" class="btn btn-primary"><span id="icon-ask-ai"></span> Ask ResQ AI</a>
+    </div>
+
+    <section class="grid grid-4" aria-label="Key metrics">
+      <div class="card card-hover stat-card">
+        <div>
+          <div class="stat-icon" style="background:var(--color-secondary-light); color:var(--color-secondary);" id="icon-weather-stat"></div>
+          <h3>31&deg;C</h3>
+          <div class="stat-label">Current Weather &middot; Clear</div>
+        </div>
+        <span class="badge badge-info">Live</span>
+      </div>
+      <div class="card card-hover stat-card">
+        <div>
+          <div class="stat-icon" style="background:var(--color-warning-light); color:var(--color-warning);" id="icon-risk-stat"></div>
+          <h3>Moderate</h3>
+          <div class="stat-label">Disaster Risk &middot; Flood</div>
+        </div>
+        <span class="badge badge-warning">Watch</span>
+      </div>
+      <div class="card card-hover stat-card">
+        <div>
+          <div class="stat-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="icon-shelter-stat"></div>
+          <h3>1.2 km</h3>
+          <div class="stat-label">Nearest Shelter &middot; Civil Lines</div>
+        </div>
+        <span class="badge badge-success">Open</span>
+      </div>
+      <div class="card card-hover stat-card">
+        <div>
+          <div class="stat-icon" style="background:#FEE2E2; color:var(--color-danger);" id="icon-services-stat"></div>
+          <h3>4</h3>
+          <div class="stat-label">Emergency Services Nearby</div>
+        </div>
+        <span class="badge badge-danger">Priority</span>
+      </div>
+    </section>
+
+    <section class="card mt-6" aria-label="Live map">
+      <div class="flex justify-between items-center mb-4">
+        <h3>Nearby Risk Map</h3>
+        <a href="shelter-finder.html" class="btn btn-secondary btn-sm">Open Full Map</a>
+      </div>
+      <div class="map-placeholder">
+        <span class="map-pin p1" id="pin1"></span>
+        <span class="map-pin p2" id="pin2"></span>
+        <span class="map-pin p3" id="pin3"></span>
+        <span class="map-caption">Map integration pending &middot; Google Maps API</span>
+      </div>
+    </section>
+
+    <section class="mt-6" aria-label="Quick actions">
+      <h3 class="mb-4">Quick Actions</h3>
+      <div class="grid grid-4">
+        <a href="upload-image.html" class="card card-hover quick-action">
+          <span class="qa-icon" id="qa-upload"></span><span>Upload Image</span>
+        </a>
+        <a href="chatbot.html" class="card card-hover quick-action">
+          <span class="qa-icon" id="qa-chat"></span><span>Chatbot</span>
+        </a>
+        <a href="weather.html" class="card card-hover quick-action">
+          <span class="qa-icon" id="qa-weather"></span><span>Weather</span>
+        </a>
+        <a href="shelter-finder.html" class="card card-hover quick-action">
+          <span class="qa-icon" id="qa-shelter"></span><span>Shelter Finder</span>
+        </a>
+        <a href="emergency-guide.html" class="card card-hover quick-action">
+          <span class="qa-icon" id="qa-guide"></span><span>Emergency Guide</span>
+        </a>
+        <a href="emergency-services.html" class="card card-hover quick-action">
+          <span class="qa-icon" id="qa-services"></span><span>Emergency Services</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="card mt-6" aria-label="Recent alerts">
+      <div class="flex justify-between items-center mb-4">
+        <h3>Recent Alerts</h3>
+        <span class="badge badge-danger"><span class="badge-dot"></span>3 Active</span>
+      </div>
+
+      <div class="alert-row">
+        <span class="alert-icon" style="background:var(--color-secondary-light); color:var(--color-secondary);" id="alert-icon-1"></span>
+        <div style="flex:1;">
+          <strong>Heavy Rain Warning</strong>
+          <p style="font-size:0.85rem;">Sustained heavy rainfall expected across the district through tonight.</p>
+        </div>
+        <span class="alert-time">10 min ago</span>
+      </div>
+      <div class="alert-row">
+        <span class="alert-icon" style="background:var(--color-warning-light); color:var(--color-warning);" id="alert-icon-2"></span>
+        <div style="flex:1;">
+          <strong>Flood Warning</strong>
+          <p style="font-size:0.85rem;">River levels rising near low-lying residential zones. Monitor closely.</p>
+        </div>
+        <span class="alert-time">42 min ago</span>
+      </div>
+      <div class="alert-row">
+        <span class="alert-icon" style="background:#FEE2E2; color:var(--color-danger);" id="alert-icon-3"></span>
+        <div style="flex:1;">
+          <strong>Fire Alert</strong>
+          <p style="font-size:0.85rem;">Brush fire reported 6 km northeast. Fire services on site.</p>
+        </div>
+        <span class="alert-time">1 hr ago</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/common.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

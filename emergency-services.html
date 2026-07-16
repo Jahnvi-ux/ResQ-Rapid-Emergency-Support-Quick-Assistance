@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emergency Services — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="app-shell" id="appShell">
+  <div id="sidebarSlot"></div>
+  <div id="navbarSlot"></div>
+
+  <main class="main-content" id="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Get Help Fast</span>
+        <h1 style="font-size:1.9rem;">Nearby Emergency Services</h1>
+        <p>Hospitals, police, fire stations, and relief camps ranked by distance.</p>
+      </div>
+    </div>
+
+    <div class="finder-layout">
+      <div class="card map-placeholder" style="height:480px;">
+        <span class="map-pin p1" id="svcPinA"></span>
+        <span class="map-pin p2" id="svcPinB"></span>
+        <span class="map-pin p3" id="svcPinC"></span>
+        <span class="map-caption">Map integration pending &middot; Google Maps API</span>
+      </div>
+
+      <div>
+        <div class="card place-card">
+          <div class="place-info">
+            <span class="place-icon" style="background:#FEE2E2; color:var(--color-danger);" id="svc-icon-1"></span>
+            <div>
+              <h4>SMS Government Hospital</h4>
+              <p style="font-size:0.85rem;">1.8 km away &middot; Hospital &middot; 24/7 Emergency Ward</p>
+            </div>
+          </div>
+          <div class="place-actions">
+            <button class="icon-btn-outline call" aria-label="Call SMS Government Hospital" data-call-icon></button>
+            <button class="icon-btn-outline nav" aria-label="Navigate to SMS Government Hospital" data-nav-icon></button>
+          </div>
+        </div>
+
+        <div class="card place-card">
+          <div class="place-info">
+            <span class="place-icon" style="background:var(--color-secondary-light); color:var(--color-secondary);" id="svc-icon-2"></span>
+            <div>
+              <h4>Ashok Nagar Police Station</h4>
+              <p style="font-size:0.85rem;">1.1 km away &middot; Police &middot; Responding within 5 min</p>
+            </div>
+          </div>
+          <div class="place-actions">
+            <button class="icon-btn-outline call" aria-label="Call Ashok Nagar Police Station" data-call-icon></button>
+            <button class="icon-btn-outline nav" aria-label="Navigate to Ashok Nagar Police Station" data-nav-icon></button>
+          </div>
+        </div>
+
+        <div class="card place-card">
+          <div class="place-info">
+            <span class="place-icon" style="background:var(--color-warning-light); color:var(--color-warning);" id="svc-icon-3"></span>
+            <div>
+              <h4>Central Fire Station</h4>
+              <p style="font-size:0.85rem;">2.4 km away &middot; Fire Station &middot; 2 units available</p>
+            </div>
+          </div>
+          <div class="place-actions">
+            <button class="icon-btn-outline call" aria-label="Call Central Fire Station" data-call-icon></button>
+            <button class="icon-btn-outline nav" aria-label="Navigate to Central Fire Station" data-nav-icon></button>
+          </div>
+        </div>
+
+        <div class="card place-card">
+          <div class="place-info">
+            <span class="place-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="svc-icon-4"></span>
+            <div>
+              <h4>Malviya Nagar Relief Camp</h4>
+              <p style="font-size:0.85rem;">2.9 km away &middot; Relief Camp &middot; Food &amp; medical aid</p>
+            </div>
+          </div>
+          <div class="place-actions">
+            <button class="icon-btn-outline call" aria-label="Call Malviya Nagar Relief Camp" data-call-icon></button>
+            <button class="icon-btn-outline nav" aria-label="Navigate to Malviya Nagar Relief Camp" data-nav-icon></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/common.js"></script>
+<script src="js/emergency-services.js"></script>
+</body>
+</html>

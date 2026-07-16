@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emergency Guide — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="app-shell" id="appShell">
+  <div id="sidebarSlot"></div>
+  <div id="navbarSlot"></div>
+
+  <main class="main-content" id="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Preparedness Center</span>
+        <h1 style="font-size:1.9rem;">Emergency Guide</h1>
+        <p>Step-by-step readiness for every disaster type, before it happens.</p>
+      </div>
+    </div>
+
+    <!-- Disaster category tabs -->
+    <div class="category-tabs" id="categoryTabs" role="tablist" aria-label="Disaster categories"></div>
+
+    <!-- Interactive step-by-step guide -->
+    <section class="card mb-4" aria-label="Step-by-step guide" style="margin-bottom:var(--space-6);">
+      <div class="guide-progress" id="guideProgress"></div>
+      <div id="stepCardsWrap"></div>
+      <div class="step-nav">
+        <button class="btn btn-secondary" id="prevStepBtn">Back</button>
+        <span class="text-secondary" id="stepCounter" style="align-self:center; font-size:0.85rem;"></span>
+        <button class="btn btn-primary" id="nextStepBtn">Next Step</button>
+      </div>
+    </section>
+
+    <!-- Preparedness timeline -->
+    <section class="mb-4" style="margin-bottom:var(--space-6);">
+      <h3 class="mb-4">Preparedness Timeline</h3>
+      <div class="timeline-wrap" id="timelineWrap"></div>
+      <div class="card" id="timelineDetail"></div>
+    </section>
+
+    <!-- Preparedness statistics -->
+    <section class="mb-4" style="margin-bottom:var(--space-6);">
+      <h3 class="mb-4">Preparedness Statistics</h3>
+      <div class="grid grid-4">
+        <div class="card card-hover counter-card">
+          <div class="counter-num" data-target="72" data-suffix="%">0%</div>
+          <div class="counter-label">Emergency Kit Readiness</div>
+        </div>
+        <div class="card card-hover counter-card">
+          <div class="counter-num" data-target="8" data-suffix=" min">0 min</div>
+          <div class="counter-label">Safe Evacuation Time</div>
+        </div>
+        <div class="card card-hover counter-card">
+          <div class="counter-num" data-target="61" data-suffix="%">0%</div>
+          <div class="counter-label">Population Preparedness</div>
+        </div>
+        <div class="card card-hover counter-card">
+          <div class="counter-num" data-target="1200" data-suffix="+">0+</div>
+          <div class="counter-label">Shelter Capacity</div>
+        </div>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <div class="card">
+          <div class="ring-wrap" id="ring1">
+            <svg viewBox="0 0 96 96">
+              <circle class="ring-bg" cx="48" cy="48" r="40"></circle>
+              <circle class="ring-fill" cx="48" cy="48" r="40" data-pct="72"></circle>
+            </svg>
+            <span class="ring-label">72%</span>
+          </div>
+          <p style="text-align:center; font-weight:600;">Kit Readiness</p>
+        </div>
+        <div class="card">
+          <div class="ring-wrap" id="ring2">
+            <svg viewBox="0 0 96 96">
+              <circle class="ring-bg" cx="48" cy="48" r="40"></circle>
+              <circle class="ring-fill" cx="48" cy="48" r="40" data-pct="45"></circle>
+            </svg>
+            <span class="ring-label">45%</span>
+          </div>
+          <p style="text-align:center; font-weight:600;">Weather Risk Level</p>
+        </div>
+        <div class="card">
+          <h4 class="mb-4" style="text-align:center;">Preparedness by Category</h4>
+          <div class="bar-chart" id="barChart">
+            <div class="bar-col"><div class="bar" data-h="80"></div><span class="bar-name">Flood</span></div>
+            <div class="bar-col"><div class="bar" data-h="65"></div><span class="bar-name">Fire</span></div>
+            <div class="bar-col"><div class="bar" data-h="55"></div><span class="bar-name">Quake</span></div>
+            <div class="bar-col"><div class="bar" data-h="70"></div><span class="bar-name">Cyclone</span></div>
+            <div class="bar-col"><div class="bar" data-h="40"></div><span class="bar-name">Heat</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo videos -->
+    <section class="mb-4" style="margin-bottom:var(--space-6);">
+      <h3 class="mb-4">Demo Videos</h3>
+      <div class="grid grid-3" id="videoGrid"></div>
+    </section>
+
+    <!-- Emergency checklist -->
+    <section class="grid grid-2" style="margin-bottom:var(--space-6);">
+      <div class="card">
+        <h3 class="mb-4">Emergency Checklist</h3>
+        <div class="checklist-progress-label">
+          <span>Your progress</span>
+          <span id="checklistProgressText">0 / 7</span>
+        </div>
+        <div class="confidence-bar mb-4"><div class="confidence-bar-fill" id="checklistFill"></div></div>
+        <div id="checklistItems"></div>
+      </div>
+
+      <!-- Safety tips carousel -->
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div class="tips-carousel">
+          <div class="tips-track" id="tipsTrack"></div>
+          <button class="carousel-arrow prev" id="tipsPrev" aria-label="Previous tip"></button>
+          <button class="carousel-arrow next" id="tipsNext" aria-label="Next tip"></button>
+        </div>
+        <div class="carousel-dots" id="tipsDots"></div>
+      </div>
+    </section>
+
+    <!-- Emergency infographics -->
+    <section class="mb-4" style="margin-bottom:var(--space-6);">
+      <h3 class="mb-4">Emergency Infographics</h3>
+      <div class="grid grid-3" id="infographicGrid"></div>
+    </section>
+
+    <!-- Learn more cards -->
+    <section>
+      <h3 class="mb-4">Learn More</h3>
+      <div class="grid grid-4" id="learnMoreGrid"></div>
+    </section>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/common.js"></script>
+<script src="js/emergency-guide.js"></script>
+</body>
+</html>

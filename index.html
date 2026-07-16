@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ResQ — AI-Powered Disaster Response Assistant</title>
+<meta name="description" content="ResQ helps you stay informed, get emergency guidance, find nearby shelters, and access emergency services instantly." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body data-shell="public">
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="landing-nav" aria-label="Site">
+  <a href="index.html" class="flex items-center gap-2" style="text-decoration:none;">
+    <span class="brand-mark" id="logoIcon"></span>
+    <span class="brand-word">ResQ</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="emergency-guide.html">Preparedness</a>
+    <a href="#about">About</a>
+    <a href="login.html">Login</a>
+  </div>
+  <a href="login.html" class="btn btn-primary btn-sm">Get Started</a>
+</nav>
+
+<main id="main">
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      Live disaster monitoring, always on
+    </div>
+    <h1>ResQ</h1>
+    <p class="hero-subtitle">AI-Powered Disaster Response Assistant</p>
+    <p class="hero-desc">
+      Stay informed. Receive emergency guidance. Find nearby shelters.
+      Access emergency services instantly — all from one calm, reliable place.
+    </p>
+    <div class="hero-cta">
+      <a href="login.html" class="btn btn-primary">Get Started</a>
+      <a href="login.html" class="btn btn-secondary">Login</a>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="grid grid-3" style="gap:16px;">
+        <div class="card card-flat" style="padding:16px;">
+          <span class="badge badge-warning"><span class="badge-dot"></span>Flood Watch</span>
+          <h3 style="font-size:1.05rem; margin-top:10px;">Yamuna Basin</h3>
+          <p style="font-size:0.82rem;">Moderate risk &middot; next 24h</p>
+        </div>
+        <div class="card card-flat" style="padding:16px;">
+          <span class="badge badge-info"><span class="badge-dot"></span>Weather</span>
+          <h3 style="font-size:1.05rem; margin-top:10px;">31&deg;C, Clear</h3>
+          <p style="font-size:0.82rem;">Wind 12 km/h &middot; Humidity 48%</p>
+        </div>
+        <div class="card card-flat" style="padding:16px;">
+          <span class="badge badge-success"><span class="badge-dot"></span>Nearby</span>
+          <h3 style="font-size:1.05rem; margin-top:10px;">3 Shelters</h3>
+          <p style="font-size:0.82rem;">Closest: 1.2 km away</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-strip">
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Monitoring</div></div>
+    <div class="stat-item"><div class="stat-num">1,200+</div><div class="stat-label">Shelters Mapped</div></div>
+    <div class="stat-item"><div class="stat-num">98%</div><div class="stat-label">Guidance Accuracy*</div></div>
+    <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">Disaster Categories</div></div>
+  </div>
+
+  <section class="section" id="features">
+    <div class="section-head">
+      <span class="eyebrow">What ResQ Does</span>
+      <h2>Everything you need in a crisis, in one app</h2>
+      <p class="mt-2">Each tool is built to be fast to reach and simple to use under pressure.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card card-hover feature-card">
+        <div class="feature-icon emerald" id="icon-chat"></div>
+        <h3>AI Assistant</h3>
+        <p class="mt-2">Ask questions in plain language and get calm, step-by-step emergency guidance.</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon blue" id="icon-cloud"></div>
+        <h3>Weather Alerts</h3>
+        <p class="mt-2">Live conditions and forecast-based warnings for your exact location.</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon emerald" id="icon-mappin"></div>
+        <h3>Shelter Finder</h3>
+        <p class="mt-2">Locate the nearest open shelters with directions in a single tap.</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon amber" id="icon-hospital"></div>
+        <h3>Emergency Services</h3>
+        <p class="mt-2">Hospitals, police, fire stations, and relief camps, ranked by distance.</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon blue" id="icon-camera"></div>
+        <h3>Image Analysis</h3>
+        <p class="mt-2">Upload a photo of the situation for an instant preliminary read.</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon emerald" id="icon-book"></div>
+        <h3>Emergency Guide</h3>
+        <p class="mt-2">Interactive, category-specific preparedness steps for before, during, and after.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="about">
+  <div class="footer-grid">
+    <div>
+      <div class="flex items-center gap-2" style="margin-bottom:12px;">
+        <span style="color:var(--color-primary);" id="footerLogoIcon"></span>
+        <span class="brand-word">ResQ</span>
+      </div>
+      <p style="max-width:280px; font-size:0.85rem;">An AI-powered disaster response assistant built to keep people informed and safe. Frontend preview build.</p>
+    </div>
+    <div>
+      <h4>Product</h4>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="chatbot.html">Chatbot</a>
+      <a href="weather.html">Weather</a>
+      <a href="emergency-guide.html">Preparedness</a>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="shelter-finder.html">Shelter Finder</a>
+      <a href="emergency-services.html">Emergency Services</a>
+      <a href="upload-image.html">Upload Image</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <a href="#about">About</a>
+      <a href="login.html">Login</a>
+      <a href="#">Government Guidelines</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 ResQ. Frontend demo — no live data connected.</span>
+    <span>Built for emergency response teams.</span>
+  </div>
+</footer>
+
+<script src="js/icons.js"></script>
+<script>
+  document.getElementById("logoIcon").innerHTML = icon("shieldCheck", 26);
+  document.getElementById("footerLogoIcon").innerHTML = icon("shieldCheck", 22);
+  document.getElementById("icon-chat").innerHTML = icon("chat", 22);
+  document.getElementById("icon-cloud").innerHTML = icon("cloud", 22);
+  document.getElementById("icon-mappin").innerHTML = icon("mapPin", 22);
+  document.getElementById("icon-hospital").innerHTML = icon("hospital", 22);
+  document.getElementById("icon-camera").innerHTML = icon("camera", 22);
+  document.getElementById("icon-book").innerHTML = icon("book", 22);
+</script>
+<script src="js/common.js"></script>
+</body>
+</html>

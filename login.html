@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="auth-shell">
+  <section class="auth-visual" aria-hidden="true">
+    <div class="flex items-center gap-2">
+      <span id="visualLogo" style="color:#fff;"></span>
+      <span class="brand-word" style="color:#fff;">ResQ</span>
+    </div>
+    <p class="auth-quote">
+      "In the first minutes of a disaster, <span>clear information</span> matters as much as physical help."
+    </p>
+    <p class="auth-meta">Trusted guidance framework, modeled after national emergency response standards.</p>
+  </section>
+
+  <main class="auth-form-side" id="main">
+    <div class="auth-box">
+      <div class="flex items-center gap-2" style="margin-bottom:var(--space-6);">
+        <span class="brand-mark" id="formLogo"></span>
+        <span class="brand-word">ResQ</span>
+      </div>
+      <h2>Welcome back</h2>
+      <p class="mt-2" style="margin-bottom:var(--space-6);">Sign in to reach your dashboard, alerts, and nearest shelters.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" required />
+        </div>
+        <div class="field-row">
+          <label class="checkbox-row">
+            <input type="checkbox" name="remember" />
+            Remember me
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+      </form>
+
+      <div class="divider">or continue with</div>
+      <button type="button" class="btn-google" id="googleLoginBtn">
+        <span id="googleIcon"></span> Continue with Google
+      </button>
+
+      <p class="mt-6 text-secondary" style="text-align:center; font-size:0.88rem;">
+        Don't have an account? <a href="login.html" style="color:var(--color-secondary); font-weight:600;">Sign up</a>
+      </p>
+    </div>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script>
+  document.getElementById("visualLogo").innerHTML = icon("shieldCheck", 30);
+  document.getElementById("formLogo").innerHTML = icon("shieldCheck", 24);
+  document.getElementById("googleIcon").innerHTML = icon("google", 18);
+
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    // Frontend-only demo: no auth backend connected yet.
+    window.location.href = "dashboard.html";
+  });
+  document.getElementById("googleLoginBtn").addEventListener("click", function () {
+    window.location.href = "dashboard.html";
+  });
+</script>
+</body>
+</html>
