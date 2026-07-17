@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weather — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="app-shell" id="appShell">
+  <div id="sidebarSlot"></div>
+  <div id="navbarSlot"></div>
+
+  <main class="main-content" id="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Live Conditions</span>
+        <h1 style="font-size:1.9rem;">Weather</h1>
+        <p>Updated conditions and forecast for your saved location.</p>
+      </div>
+      <button class="btn btn-secondary" id="refreshBtn"><span id="refreshIcon"></span> Refresh</button>
+    </div>
+
+    <div class="weather-alert-banner" role="alert">
+      <span class="wa-icon" id="alertBannerIcon"></span>
+      <div style="flex:1;">
+        <strong>Heavy Rain Warning</strong>
+        <p style="font-size:0.85rem;">Sustained heavy rainfall expected through tonight. Avoid low-lying and flood-prone areas.</p>
+      </div>
+      <span class="badge badge-warning">Medium Risk</span>
+    </div>
+
+    <div class="weather-hero">
+      <div>
+        <div class="weather-loc">Jaipur, Rajasthan</div>
+        <div class="temp-num">31&deg;C</div>
+        <p style="color:rgba(255,255,255,0.85); margin-top:6px;">Partly cloudy &middot; Feels like 34&deg;C</p>
+      </div>
+      <div style="text-align:right;">
+        <span id="heroWeatherIcon" style="opacity:0.9;"></span>
+        <p style="color:rgba(255,255,255,0.85); margin-top:6px; font-size:0.85rem;">Updated 2 min ago</p>
+      </div>
+    </div>
+
+    <section class="grid grid-4 mt-6">
+      <div class="card card-hover weather-metric-card">
+        <span class="wm-icon" id="icon-temp"></span>
+        <div class="wm-value">31&deg;C</div>
+        <div class="wm-label">Temperature</div>
+      </div>
+      <div class="card card-hover weather-metric-card">
+        <span class="wm-icon" id="icon-humidity"></span>
+        <div class="wm-value">48%</div>
+        <div class="wm-label">Humidity</div>
+      </div>
+      <div class="card card-hover weather-metric-card">
+        <span class="wm-icon" id="icon-wind"></span>
+        <div class="wm-value">12 km/h</div>
+        <div class="wm-label">Wind Speed</div>
+      </div>
+      <div class="card card-hover weather-metric-card">
+        <span class="wm-icon" id="icon-rain"></span>
+        <div class="wm-value">64%</div>
+        <div class="wm-label">Rainfall Chance</div>
+      </div>
+    </section>
+
+    <section class="card mt-6">
+      <h3 class="mb-4">7-Day Forecast</h3>
+      <div class="forecast-row">
+        <div class="forecast-day"><div class="fd-name">Today</div><span class="fd-icon" data-icon="cloud"></span><div class="fd-temp">31&deg;</div></div>
+        <div class="forecast-day"><div class="fd-name">Sun</div><span class="fd-icon" data-icon="droplet"></span><div class="fd-temp">28&deg;</div></div>
+        <div class="forecast-day"><div class="fd-name">Mon</div><span class="fd-icon" data-icon="droplet"></span><div class="fd-temp">27&deg;</div></div>
+        <div class="forecast-day"><div class="fd-name">Tue</div><span class="fd-icon" data-icon="sun"></span><div class="fd-temp">33&deg;</div></div>
+        <div class="forecast-day"><div class="fd-name">Wed</div><span class="fd-icon" data-icon="sun"></span><div class="fd-temp">34&deg;</div></div>
+        <div class="forecast-day"><div class="fd-name">Thu</div><span class="fd-icon" data-icon="cloud"></span><div class="fd-temp">30&deg;</div></div>
+        <div class="forecast-day"><div class="fd-name">Fri</div><span class="fd-icon" data-icon="wind"></span><div class="fd-temp">29&deg;</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/common.js"></script>
+<script src="js/weather.js"></script>
+</body>
+</html>

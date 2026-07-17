@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Profile — ResQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="app-shell" id="appShell">
+  <div id="sidebarSlot"></div>
+  <div id="navbarSlot"></div>
+
+  <main class="main-content" id="main">
+    <div class="page-header">
+      <div>
+        <span class="eyebrow">Your Account</span>
+        <h1 style="font-size:1.9rem;">Profile</h1>
+        <p>Keep your details current so responders can reach you faster.</p>
+      </div>
+    </div>
+
+    <div class="card profile-hero">
+      <span class="avatar-lg">RS</span>
+      <div style="flex:1;">
+        <h2>Reeya Sharma</h2>
+        <p class="mt-2">reeya.sharma@example.com</p>
+      </div>
+      <button class="btn btn-primary" id="editProfileBtn"><span id="editIcon"></span> Edit Profile</button>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 class="mb-4">Personal Details</h3>
+        <div class="profile-field"><div class="pf-label">Full Name</div><div class="pf-value">Reeya Sharma</div></div>
+        <div class="profile-field"><div class="pf-label">Email</div><div class="pf-value">reeya.sharma@example.com</div></div>
+        <div class="profile-field"><div class="pf-label">Phone</div><div class="pf-value">+91 98765 43210</div></div>
+        <div class="profile-field"><div class="pf-label">Blood Group</div><div class="pf-value">O+</div></div>
+      </div>
+
+      <div class="card">
+        <h3 class="mb-4">Safety Details</h3>
+        <div class="profile-field"><div class="pf-label">Preferred Language</div><div class="pf-value">English</div></div>
+        <div class="profile-field"><div class="pf-label">Emergency Contact</div><div class="pf-value">Aman Sharma &middot; +91 91234 56789</div></div>
+        <div class="profile-field"><div class="pf-label">Home Address</div><div class="pf-value">Civil Lines, Jaipur, Rajasthan</div></div>
+        <div class="profile-field"><div class="pf-label">Account Status</div><div class="pf-value"><span class="badge badge-success">Verified</span></div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/common.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>
