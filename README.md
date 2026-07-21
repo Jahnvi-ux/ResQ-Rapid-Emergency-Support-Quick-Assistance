@@ -220,6 +220,7 @@ http://127.0.0.1:8000/docs
 # Contributors
 
 Developed as an academic disaster management project using FastAPI, MongoDB, and AI technologies.
+
 Fronted & UI Design :- Reeya0409
 Backend, JWT Authentication & MongoDB Atlas setup :- Jahnvi-ux
 API Integration & AWS Deployment :- Parul-kumari089
