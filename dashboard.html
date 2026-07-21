@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/responsive.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -20,41 +21,41 @@
     <div class="page-header">
       <div>
         <span class="eyebrow">Overview</span>
-        <h1 style="font-size:1.9rem;">Good afternoon, Reeya</h1>
+        <h1 style="font-size:1.9rem;" id="greetingText">Good afternoon</h1>
         <p>Here's what's happening around your area right now.</p>
       </div>
       <a href="chatbot.html" class="btn btn-primary"><span id="icon-ask-ai"></span> Ask ResQ AI</a>
     </div>
 
     <section class="grid grid-4" aria-label="Key metrics">
-      <div class="card card-hover stat-card">
+      <div class="card card-hover stat-card" data-skeleton>
         <div>
           <div class="stat-icon" style="background:var(--color-secondary-light); color:var(--color-secondary);" id="icon-weather-stat"></div>
-          <h3>31&deg;C</h3>
-          <div class="stat-label">Current Weather &middot; Clear</div>
+          <h3 id="statWeatherValue">&mdash;</h3>
+          <div class="stat-label" id="statWeatherLabel">Current Weather</div>
         </div>
         <span class="badge badge-info">Live</span>
       </div>
-      <div class="card card-hover stat-card">
+      <div class="card card-hover stat-card" data-skeleton>
         <div>
           <div class="stat-icon" style="background:var(--color-warning-light); color:var(--color-warning);" id="icon-risk-stat"></div>
-          <h3>Moderate</h3>
-          <div class="stat-label">Disaster Risk &middot; Flood</div>
+          <h3 id="statRiskValue">&mdash;</h3>
+          <div class="stat-label" id="statRiskLabel">Disaster Risk</div>
         </div>
-        <span class="badge badge-warning">Watch</span>
+        <span class="badge badge-warning" id="statRiskBadge">Watch</span>
       </div>
-      <div class="card card-hover stat-card">
+      <div class="card card-hover stat-card" data-skeleton>
         <div>
           <div class="stat-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="icon-shelter-stat"></div>
-          <h3>1.2 km</h3>
-          <div class="stat-label">Nearest Shelter &middot; Civil Lines</div>
+          <h3 id="statShelterValue">&mdash;</h3>
+          <div class="stat-label" id="statShelterLabel">Nearest Shelter</div>
         </div>
-        <span class="badge badge-success">Open</span>
+        <span class="badge badge-success" id="statShelterBadge">Open</span>
       </div>
-      <div class="card card-hover stat-card">
+      <div class="card card-hover stat-card" data-skeleton>
         <div>
           <div class="stat-icon" style="background:#FEE2E2; color:var(--color-danger);" id="icon-services-stat"></div>
-          <h3>4</h3>
+          <h3 id="statServicesValue">&mdash;</h3>
           <div class="stat-label">Emergency Services Nearby</div>
         </div>
         <span class="badge badge-danger">Priority</span>
@@ -66,12 +67,11 @@
         <h3>Nearby Risk Map</h3>
         <a href="shelter-finder.html" class="btn btn-secondary btn-sm">Open Full Map</a>
       </div>
-      <div class="map-placeholder">
-        <span class="map-pin p1" id="pin1"></span>
-        <span class="map-pin p2" id="pin2"></span>
-        <span class="map-pin p3" id="pin3"></span>
-        <span class="map-caption">Map integration pending &middot; Google Maps API</span>
-      </div>
+      <div id="dashboardMap" style="height:360px; border-radius:var(--radius-md); overflow:hidden;"></div>
+      <p class="mt-4 text-secondary" style="font-size:0.85rem;" id="dashboardLocation">Locating&hellip;</p>
+      <p class="text-secondary" style="font-size:0.85rem;">
+        Live conditions: <span id="dashboardTemp">&mdash;</span> &middot; <span id="dashboardWeather">&mdash;</span>
+      </p>
     </section>
 
     <section class="mt-6" aria-label="Quick actions">
@@ -101,39 +101,28 @@
     <section class="card mt-6" aria-label="Recent alerts">
       <div class="flex justify-between items-center mb-4">
         <h3>Recent Alerts</h3>
-        <span class="badge badge-danger"><span class="badge-dot"></span>3 Active</span>
+        <span class="badge badge-danger" id="alertsCountBadge"><span class="badge-dot"></span>&mdash;</span>
       </div>
 
-      <div class="alert-row">
-        <span class="alert-icon" style="background:var(--color-secondary-light); color:var(--color-secondary);" id="alert-icon-1"></span>
-        <div style="flex:1;">
-          <strong>Heavy Rain Warning</strong>
-          <p style="font-size:0.85rem;">Sustained heavy rainfall expected across the district through tonight.</p>
+      <div id="recentAlertsContainer">
+        <div class="alert-row" data-skeleton>
+          <span class="alert-icon" style="background:var(--color-secondary-light); color:var(--color-secondary);"></span>
+          <div style="flex:1;">
+            <strong>Loading alerts&hellip;</strong>
+            <p style="font-size:0.85rem;">&nbsp;</p>
+          </div>
+          <span class="alert-time">&nbsp;</span>
         </div>
-        <span class="alert-time">10 min ago</span>
-      </div>
-      <div class="alert-row">
-        <span class="alert-icon" style="background:var(--color-warning-light); color:var(--color-warning);" id="alert-icon-2"></span>
-        <div style="flex:1;">
-          <strong>Flood Warning</strong>
-          <p style="font-size:0.85rem;">River levels rising near low-lying residential zones. Monitor closely.</p>
-        </div>
-        <span class="alert-time">42 min ago</span>
-      </div>
-      <div class="alert-row">
-        <span class="alert-icon" style="background:#FEE2E2; color:var(--color-danger);" id="alert-icon-3"></span>
-        <div style="flex:1;">
-          <strong>Fire Alert</strong>
-          <p style="font-size:0.85rem;">Brush fire reported 6 km northeast. Fire services on site.</p>
-        </div>
-        <span class="alert-time">1 hr ago</span>
       </div>
     </section>
   </main>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/icons.js"></script>
-<script src="js/common.js"></script>
+<script src="js/api.js?v=2"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/common.js?v=2"></script>
 <script src="js/dashboard.js"></script>
 </body>
 </html>

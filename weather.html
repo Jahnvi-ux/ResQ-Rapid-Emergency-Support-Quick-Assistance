@@ -36,36 +36,43 @@
     </div>
 
     <div class="weather-hero">
-      <div>
-        <div class="weather-loc">Jaipur, Rajasthan</div>
-        <div class="temp-num">31&deg;C</div>
-        <p style="color:rgba(255,255,255,0.85); margin-top:6px;">Partly cloudy &middot; Feels like 34&deg;C</p>
-      </div>
-      <div style="text-align:right;">
-        <span id="heroWeatherIcon" style="opacity:0.9;"></span>
-        <p style="color:rgba(255,255,255,0.85); margin-top:6px; font-size:0.85rem;">Updated 2 min ago</p>
-      </div>
-    </div>
+
+  <div>
+    <div class="weather-loc" id="cityName">Loading...</div>
+    <div class="temp-num" id="mainTemp">--°C</div>
+
+    <p id="weatherDescription"
+       style="color:rgba(255,255,255,0.85); margin-top:6px;">
+       Loading...
+    </p>
+  </div>
+
+  <div style="text-align:right;">
+    <span id="heroWeatherIcon" style="opacity:0.9;"></span>
+  </div>
+
+</div>
+
 
     <section class="grid grid-4 mt-6">
       <div class="card card-hover weather-metric-card">
         <span class="wm-icon" id="icon-temp"></span>
-        <div class="wm-value">31&deg;C</div>
+        <div class="wm-value" id="temperature">--°C</div>
         <div class="wm-label">Temperature</div>
       </div>
       <div class="card card-hover weather-metric-card">
         <span class="wm-icon" id="icon-humidity"></span>
-        <div class="wm-value">48%</div>
+        <div class="wm-value" id="humidity">--%</div>
         <div class="wm-label">Humidity</div>
       </div>
       <div class="card card-hover weather-metric-card">
         <span class="wm-icon" id="icon-wind"></span>
-        <div class="wm-value">12 km/h</div>
+        <div class="wm-value" id="wind">-- km/h</div>
         <div class="wm-label">Wind Speed</div>
       </div>
       <div class="card card-hover weather-metric-card">
         <span class="wm-icon" id="icon-rain"></span>
-        <div class="wm-value">64%</div>
+        <div class="wm-value" id="rain">--%</div>
         <div class="wm-label">Rainfall Chance</div>
       </div>
     </section>
@@ -86,7 +93,9 @@
 </div>
 
 <script src="js/icons.js"></script>
-<script src="js/common.js"></script>
+<script src="js/api.js?v=2"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/common.js?v=2"></script>
 <script src="js/weather.js"></script>
 </body>
 </html>
