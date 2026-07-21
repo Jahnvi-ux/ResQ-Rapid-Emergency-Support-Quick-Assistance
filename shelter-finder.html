@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/responsive.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -26,75 +27,40 @@
     </div>
 
     <div class="finder-search">
-      <input type="text" placeholder="Search by area, landmark, or shelter name&hellip;" aria-label="Search shelters" />
+      <input id="searchInput" type="text" placeholder="Search by area, landmark, or shelter name..." aria-label="Search shelters">
       <button class="btn btn-secondary location-btn"><span id="locIcon"></span> Current Location</button>
-      <button class="btn btn-primary"><span id="searchIcon"></span> Search</button>
+      <button id="searchBtn" class="btn btn-primary"><span id="searchIcon"></span> Search</button>
     </div>
 
     <div class="finder-layout">
-      <div class="card map-placeholder" style="height:520px;">
-        <span class="map-pin p1" id="pinA"></span>
-        <span class="map-pin p2" id="pinB"></span>
-        <span class="map-pin p3" id="pinC"></span>
-        <span class="map-caption">Map integration pending &middot; Google Maps API</span>
+
+      <div class="card">
+        <div id="shelterMap"></div>
       </div>
 
       <div>
-        <div class="card place-card">
-          <div class="place-info">
-            <span class="place-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="shelter-icon-1"></span>
-            <div>
-              <h4>Civil Lines Community Shelter</h4>
-              <p style="font-size:0.85rem;">1.2 km away &middot; Capacity 240 &middot; <span class="text-primary" style="font-weight:600;">Open</span></p>
-            </div>
-          </div>
-          <div class="place-actions">
-            <button class="icon-btn-outline nav" aria-label="Navigate to Civil Lines Community Shelter" data-nav-icon></button>
-          </div>
+        <!-- Shelter Details Card -->
+        <div class="card" id="shelterDetails">
+          <h2>🏠 Shelter Details</h2>
+          <hr>
+          <p>Select any green shelter marker on the map.</p>
         </div>
-        <div class="card place-card">
-          <div class="place-info">
-            <span class="place-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="shelter-icon-2"></span>
-            <div>
-              <h4>Malviya Nagar Relief Center</h4>
-              <p style="font-size:0.85rem;">2.6 km away &middot; Capacity 180 &middot; <span class="text-primary" style="font-weight:600;">Open</span></p>
-            </div>
-          </div>
-          <div class="place-actions">
-            <button class="icon-btn-outline nav" aria-label="Navigate to Malviya Nagar Relief Center" data-nav-icon></button>
-          </div>
-        </div>
-        <div class="card place-card">
-          <div class="place-info">
-            <span class="place-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="shelter-icon-3"></span>
-            <div>
-              <h4>Vaishali Nagar Govt. School Shelter</h4>
-              <p style="font-size:0.85rem;">4.1 km away &middot; Capacity 300 &middot; <span class="text-secondary" style="font-weight:600;">Nearing Capacity</span></p>
-            </div>
-          </div>
-          <div class="place-actions">
-            <button class="icon-btn-outline nav" aria-label="Navigate to Vaishali Nagar Govt. School Shelter" data-nav-icon></button>
-          </div>
-        </div>
-        <div class="card place-card">
-          <div class="place-info">
-            <span class="place-icon" style="background:var(--color-primary-light); color:var(--color-primary);" id="shelter-icon-4"></span>
-            <div>
-              <h4>Jagatpura Sports Complex Shelter</h4>
-              <p style="font-size:0.85rem;">5.8 km away &middot; Capacity 400 &middot; <span class="text-primary" style="font-weight:600;">Open</span></p>
-            </div>
-          </div>
-          <div class="place-actions">
-            <button class="icon-btn-outline nav" aria-label="Navigate to Jagatpura Sports Complex Shelter" data-nav-icon></button>
-          </div>
-        </div>
+
+        <br>
+
+        <!-- Nearby shelters populate here dynamically from OpenStreetMap/Overpass -->
+        <div id="nearbyShelterCards"></div>
       </div>
+
     </div>
   </main>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/icons.js"></script>
-<script src="js/common.js"></script>
+<script src="js/api.js?v=2"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/common.js?v=2"></script>
 <script src="js/shelter-finder.js"></script>
 </body>
 </html>

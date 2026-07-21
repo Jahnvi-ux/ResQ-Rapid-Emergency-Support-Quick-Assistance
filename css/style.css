@@ -798,7 +798,15 @@ p { color: var(--color-text-secondary); }
 }
 .msg-bot .msg-avatar { background: var(--color-primary-light); color: var(--color-primary); }
 .msg-user .msg-avatar { background: var(--color-secondary-light); color: var(--color-secondary); }
-.msg-bubble { padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.9rem; }
+.msg-bubble {
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+}
 .msg-bot .msg-bubble { background: var(--color-bg); border-bottom-left-radius: 4px; }
 .msg-user .msg-bubble { background: var(--color-primary); color: #fff; border-bottom-right-radius: 4px; }
 .typing-dots { display: inline-flex; gap: 4px; padding: 4px 0; }
@@ -828,6 +836,115 @@ p { color: var(--color-text-secondary); }
   transition: background var(--transition-fast), transform var(--transition-fast);
 }
 .chat-send:hover { background: var(--color-primary-dark); transform: scale(1.05); }
+.chat-mic {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-secondary);
+  color: white;
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 18px;
+
+  transition: transform 0.2s ease,
+              background 0.2s ease;
+}
+
+.chat-mic:hover {
+  transform: scale(1.08);
+}
+
+.chat-mic.listening {
+  background: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
+
+.chat-lang-select {
+  flex-shrink: 0;
+  max-width: 108px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+}
+.chat-lang-select:focus { border-color: var(--color-primary); outline: none; }
+
+.chat-image-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+.chat-image-preview img {
+  width: 40px; height: 40px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+.chat-image-preview button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+.chat-image-preview button:hover { color: var(--color-danger); }
+
+.msg-bubble img.msg-image {
+  max-width: 220px;
+  border-radius: var(--radius-md);
+  display: block;
+  margin-top: 8px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row .contact-info { flex: 1; }
+.contact-row .contact-info strong { display: block; }
+.contact-row .contact-info span { font-size: 0.82rem; color: var(--color-text-secondary); }
+.contact-row .btn-remove-contact {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--color-danger);
+}
+.contact-row .btn-remove-contact:hover { background: #FEE2E2; }
 
 .suggested-panel {
   background: var(--color-card);
@@ -894,6 +1011,13 @@ p { color: var(--color-text-secondary); }
    SHELTER FINDER / EMERGENCY SERVICES
    ============================================================ */
 .finder-layout { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--space-5); }
+#shelterMap {
+  width: 100%;
+  height: 520px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  z-index: 0;
+}
 .finder-search { display: flex; gap: var(--space-3); margin-bottom: var(--space-5); }
 .finder-search input {
   flex: 1; padding: 12px 16px; border: 1px solid var(--color-border);
@@ -901,6 +1025,27 @@ p { color: var(--color-text-secondary); }
 }
 .finder-search input:focus { border-color: var(--color-primary); outline: none; box-shadow: var(--shadow-focus); }
 .location-btn { display: flex; align-items: center; gap: 8px; }
+
+/* Emergency Services page uses this equivalent search-bar markup */
+.search-bar { display: flex; gap: var(--space-3); margin-bottom: var(--space-5); flex-wrap: wrap; }
+.search-input-wrapper {
+  flex: 1; min-width: 220px; display: flex; align-items: center; gap: var(--space-2);
+  padding: 0 16px; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+}
+.search-input-wrapper:focus-within { border-color: var(--color-primary); box-shadow: var(--shadow-focus); }
+.search-input-wrapper svg { color: var(--color-text-secondary); flex-shrink: 0; }
+.search-input-wrapper input {
+  flex: 1; border: none; padding: 12px 0; font-size: 0.92rem; background: transparent;
+}
+.search-input-wrapper input:focus { outline: none; }
+
+#serviceMap {
+  width: 100%;
+  height: 520px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  z-index: 0;
+}
 
 .place-card { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-3); }
 .place-card:last-child { margin-bottom: 0; }
@@ -1081,3 +1226,53 @@ p { color: var(--color-text-secondary); }
 .profile-field:last-child { border-bottom: none; }
 .profile-field .pf-label { font-size: 0.78rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
 .profile-field .pf-value { font-size: 0.98rem; font-weight: 600; margin-top: 2px; }
+
+/* ============================================================
+   TOAST NOTIFICATIONS (added for backend integration)
+   Purely additive — does not alter any existing component.
+   ============================================================ */
+.toast-stack {
+  position: fixed; top: var(--space-5); right: var(--space-5);
+  z-index: 1000; display: flex; flex-direction: column; gap: var(--space-3);
+  max-width: 360px;
+}
+.toast {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  background: #fff; border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+  padding: var(--space-4); border-left: 4px solid var(--color-secondary);
+  animation: toastIn 220ms ease;
+}
+.toast.success { border-left-color: var(--color-success); }
+.toast.error { border-left-color: var(--color-danger); }
+.toast.warning { border-left-color: var(--color-warning); }
+.toast .toast-icon { flex-shrink: 0; margin-top: 1px; }
+.toast .toast-body { flex: 1; font-size: 0.88rem; font-weight: 600; color: var(--color-text-primary); }
+.toast .toast-close { background: none; border: none; cursor: pointer; color: var(--color-text-secondary); padding: 0; line-height: 0; }
+.toast.leaving { animation: toastOut 200ms ease forwards; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(24px); } }
+
+/* Button/element loading state */
+.btn.is-loading, button.is-loading { opacity: 0.7; pointer-events: none; position: relative; }
+.btn[disabled], button[disabled] { opacity: 0.6; cursor: not-allowed; }
+.spinner-inline {
+  display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5); border-top-color: #fff;
+  animation: spin 700ms linear infinite; vertical-align: -2px; margin-right: 6px;
+}
+.btn-secondary .spinner-inline, .btn-outline .spinner-inline {
+  border: 2px solid rgba(22,163,74,0.3); border-top-color: var(--color-primary);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Inline field error text (form validation feedback) */
+.field-error {
+  color: var(--color-danger); font-size: 0.78rem; font-weight: 600; margin-top: 4px; display: none;
+}
+.field.has-error input { border-color: var(--color-danger); }
+.field.has-error .field-error { display: block; }
+
+/* Empty/auth-gated state */
+.auth-required-note {
+  text-align: center; padding: var(--space-7) var(--space-4); color: var(--color-text-secondary);
+}

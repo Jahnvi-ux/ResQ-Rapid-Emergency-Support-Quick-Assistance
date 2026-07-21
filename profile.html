@@ -26,10 +26,10 @@
     </div>
 
     <div class="card profile-hero">
-      <span class="avatar-lg">RS</span>
+      <span class="avatar-lg" id="profileAvatar">&mdash;</span>
       <div style="flex:1;">
-        <h2>Reeya Sharma</h2>
-        <p class="mt-2">reeya.sharma@example.com</p>
+        <h2 id="profileName">&mdash;</h2>
+        <p class="mt-2" id="profileEmail">&nbsp;</p>
       </div>
       <button class="btn btn-primary" id="editProfileBtn"><span id="editIcon"></span> Edit Profile</button>
     </div>
@@ -37,25 +37,54 @@
     <div class="grid grid-2">
       <div class="card">
         <h3 class="mb-4">Personal Details</h3>
-        <div class="profile-field"><div class="pf-label">Full Name</div><div class="pf-value">Reeya Sharma</div></div>
-        <div class="profile-field"><div class="pf-label">Email</div><div class="pf-value">reeya.sharma@example.com</div></div>
-        <div class="profile-field"><div class="pf-label">Phone</div><div class="pf-value">+91 98765 43210</div></div>
-        <div class="profile-field"><div class="pf-label">Blood Group</div><div class="pf-value">O+</div></div>
+        <div class="profile-field"><div class="pf-label">Full Name</div><div class="pf-value" id="pfName" data-field="name">&mdash;</div></div>
+        <div class="profile-field"><div class="pf-label">Email</div><div class="pf-value" id="pfEmail">&mdash;</div></div>
+        <div class="profile-field"><div class="pf-label">Phone</div><div class="pf-value" id="pfPhone" data-field="phone">&mdash;</div></div>
+        <div class="profile-field"><div class="pf-label">Blood Group</div><div class="pf-value" id="pfBlood" data-field="blood_group">&mdash;</div></div>
       </div>
 
       <div class="card">
         <h3 class="mb-4">Safety Details</h3>
-        <div class="profile-field"><div class="pf-label">Preferred Language</div><div class="pf-value">English</div></div>
-        <div class="profile-field"><div class="pf-label">Emergency Contact</div><div class="pf-value">Aman Sharma &middot; +91 91234 56789</div></div>
-        <div class="profile-field"><div class="pf-label">Home Address</div><div class="pf-value">Civil Lines, Jaipur, Rajasthan</div></div>
-        <div class="profile-field"><div class="pf-label">Account Status</div><div class="pf-value"><span class="badge badge-success">Verified</span></div></div>
+        <div class="profile-field"><div class="pf-label">Preferred Language</div><div class="pf-value" id="pfLanguage" data-field="language">&mdash;</div></div>
+        <div class="profile-field"><div class="pf-label">Emergency Contact</div><div class="pf-value" id="pfEmergencyContact">&mdash;</div></div>
+        <div class="profile-field"><div class="pf-label">Home Address</div><div class="pf-value" id="pfAddress" data-field="address">&mdash;</div></div>
+        <div class="profile-field"><div class="pf-label">Account Status</div><div class="pf-value" id="pfStatus">&mdash;</div></div>
       </div>
+    </div>
+
+    <div class="card mt-4" id="contactsCard">
+      <h3 class="mb-4">Emergency Contacts</h3>
+      <p style="margin-bottom:var(--space-4);">These are the people notified and sent your live location when you use the SOS button.</p>
+
+      <div id="contactsList"></div>
+
+      <form id="addContactForm" class="grid grid-2" style="gap:var(--space-3); margin-top:var(--space-4); align-items:end;">
+        <div class="field" style="margin:0;">
+          <label for="contactName">Name</label>
+          <input type="text" id="contactName" placeholder="Full name" required />
+        </div>
+        <div class="field" style="margin:0;">
+          <label for="contactPhone">Phone</label>
+          <input type="tel" id="contactPhone" placeholder="Phone number" required />
+        </div>
+        <div class="field" style="margin:0;">
+          <label for="contactEmail">Email (used to notify them)</label>
+          <input type="email" id="contactEmail" placeholder="them@example.com" />
+        </div>
+        <div class="field" style="margin:0;">
+          <label for="contactRelation">Relation</label>
+          <input type="text" id="contactRelation" placeholder="e.g. Parent, Sibling" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="grid-column:1 / -1;">Add Emergency Contact</button>
+      </form>
     </div>
   </main>
 </div>
 
 <script src="js/icons.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/common.js"></script>
-<script src="js/profile.js"></script>
+<script src="js/profile.js?v=2"></script>
 </body>
 </html>

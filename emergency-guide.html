@@ -145,8 +145,19 @@
   </main>
 </div>
 
+<!-- Guide detail modal (videos / infographics) -->
+<div class="modal-overlay" id="guideModal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
+  <div class="modal">
+    <button class="modal-close" id="guideModalClose" aria-label="Close">&times;</button>
+    <h3 id="guideModalTitle" class="mt-2"></h3>
+    <div id="guideModalBody" class="mt-2"></div>
+  </div>
+</div>
+
 <script src="js/icons.js"></script>
-<script src="js/common.js"></script>
-<script src="js/emergency-guide.js"></script>
+<script src="js/api.js?v=2"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/common.js?v=2"></script>
+<script src="js/emergency-guide.js?v=2"></script>
 </body>
 </html>

@@ -1,8 +1,11 @@
 /* ============================================================
    RESQ — Emergency Guide (Preparedness Center) Script
-   All content below is static/mock, structured so a future
-   backend can swap CATEGORIES / VIDEOS / TIPS for live data
-   without touching the render functions.
+   Category step content is loaded from /guides (guide_service,
+   seeded with Before/During/After data in MongoDB) and merged
+   into the local CATEGORIES scaffold below. Checklist state is
+   synced with /users/me/checklist so progress persists across
+   visits. Videos/tips/infographics remain local UI content —
+   there's no backend-owned data for those yet.
    ============================================================ */
 
 const CATEGORIES = [
@@ -107,12 +110,13 @@ const TIMELINE_STAGES = [
 ];
 
 const VIDEOS = [
-  { title: "Flood Evacuation Walkthrough", duration: "3:12" },
-  { title: "Fire Evacuation Drill", duration: "2:45" },
-  { title: "Earthquake Drop-Cover-Hold Drill", duration: "1:58" },
-  { title: "CPR Demonstration", duration: "4:20" },
-  { title: "Basic First Aid Essentials", duration: "5:03" },
-  { title: "Packing an Emergency Kit", duration: "2:30" },
+  { title: "Flood Evacuation Walkthrough", duration: "4:07",  url: "https://www.youtube.com/watch?v=43M5mZuzHF8&t=19s" },
+  { title: "Fire Evacuation Drill", duration: "1:00",  url: "https://www.youtube.com/watch?v=C9KSFRq4rXA&t=10s" },
+  { title: "Earthquake Drop-Cover-Hold Drill", duration: "1:14",  url: "https://www.youtube.com/watch?v=aV89_yUJunM" },
+  { title: "CPR Demonstration", duration: "0:23",  url: "https://www.youtube.com/shorts/_F4Of33ifbw" },
+  { title: "Basic First Aid Essentials", duration: "2:15",  url: "https://www.youtube.com/watch?v=7ldJ5Ke8tU8" },
+  { title: "Packing an Emergency Kit", duration: "2:18",  url: "https://www.youtube.com/watch?v=7_diceQvTqE" },
+
 ];
 
 const CHECKLIST = [
@@ -133,19 +137,37 @@ const TIPS = [
 ];
 
 const INFOGRAPHICS = [
-  { title: "Emergency Bag Essentials", icon: "upload", color: "emerald" },
-  { title: "CPR Steps", icon: "heart", color: "amber" },
-  { title: "Flood Safety", icon: "droplet", color: "blue" },
-  { title: "Fire Safety", icon: "flame", color: "amber" },
-  { title: "Earthquake Safety", icon: "activity", color: "emerald" },
-  { title: "Landslide Awareness", icon: "mountain", color: "blue" },
+  {
+    title: "Emergency Bag Essentials", icon: "upload", color: "emerald",
+    points: ["3 litres of water per person, per day (3-day supply)", "Non-perishable food (3-day supply)", "Flashlight + extra batteries", "First aid kit and essential medicines", "Power bank, charging cables", "Copies of ID, insurance, and medical documents in a waterproof bag", "Whistle to signal for help", "Cash in small denominations"],
+  },
+  {
+    title: "CPR Steps", icon: "heart", color: "amber",
+    points: ["Check the scene is safe, then check responsiveness", "Call emergency services (or have someone else call) immediately", "Place the heel of your hand on the center of the chest", "Push hard and fast — about 100–120 compressions per minute, 5–6 cm deep", "Allow full chest recoil between compressions", "If trained, give 2 rescue breaths after every 30 compressions", "Continue until help arrives or the person responds"],
+  },
+  {
+    title: "Flood Safety", icon: "droplet", color: "blue",
+    points: ["Move to higher ground immediately, don't wait for instructions", "Never walk or drive through moving water — 15cm can knock you down", "Avoid contact with flood water; it may be contaminated or electrified", "Turn off electricity at the mains if it's safe to reach", "Keep your emergency kit and documents in a waterproof bag", "Listen to official radio/alerts for evacuation routes"],
+  },
+  {
+    title: "Fire Safety", icon: "flame", color: "amber",
+    points: ["Know two exit routes from every room", "Get low and crawl under smoke", "Feel doors before opening — don't open if hot", "Never use elevators during a fire", "Stop, Drop, and Roll if your clothing catches fire", "Once out, stay out — never re-enter for belongings"],
+  },
+  {
+    title: "Earthquake Safety", icon: "activity", color: "emerald",
+    points: ["Drop, Cover, and Hold On — don't run outside during shaking", "Stay away from windows, mirrors, and tall furniture", "If in bed, stay there and cover your head with a pillow", "If outdoors, move to an open area away from buildings and power lines", "After shaking stops, check for gas leaks and structural damage", "Expect aftershocks and keep shoes on to avoid broken glass"],
+  },
+  {
+    title: "Landslide Awareness", icon: "mountain", color: "blue",
+    points: ["Watch for new cracks in ground, walls, or pavement", "Tilting trees, poles, or fences can signal ground movement", "Unusual sounds like cracking trees or boulders knocking together are a warning", "Move away sideways from the slide path, not downhill", "Evacuate hillside areas early during prolonged heavy rain", "Report blocked or damaged roads to local authorities"],
+  },
 ];
 
 const LEARN_MORE = [
-  { title: "Government Guidelines", desc: "Official disaster response protocols and standards." },
-  { title: "Emergency Numbers", desc: "National and local emergency contact directory." },
-  { title: "Disaster Awareness", desc: "Understand the risks common to your region." },
-  { title: "Community Preparedness", desc: "How neighborhoods organize before disaster strikes." },
+  { title: "Government Guidelines", desc: "Official disaster response protocols and standards.", url: "https://ndma.gov.in/" },
+  { title: "Emergency Numbers", desc: "National and local emergency contact directory.", url: "https://www.india.gov.in/india-emergency-numbers" },
+  { title: "Disaster Awareness", desc: "Understand the risks common to your region.", url: "https://nidm.gov.in/" },
+  { title: "Community Preparedness", desc: "How neighborhoods organize before disaster strikes.", url: "https://www.ready.gov/community-preparedness-toolkit" },
 ];
 
 // ---------- State ----------
@@ -153,7 +175,35 @@ let activeCategory = CATEGORIES[0].key;
 let activeStep = 0;
 let activeTimeline = 0;
 let tipIndex = 0;
-const checkedItems = new Set();
+let checkedItems = new Set();
+
+// ---------- Backend content merge ----------
+async function loadGuideContent() {
+  try {
+    const res = await api.getGuides();
+    const byCategory = Object.fromEntries(res.data.map((g) => [g.category, g]));
+    CATEGORIES.forEach((cat) => {
+      const backendGuide = byCategory[cat.key];
+      if (!backendGuide) return; // e.g. "firstaid" has no dedicated guide document yet
+      cat.steps = [
+        { title: "Before the Disaster", desc: backendGuide.before.join(" ") },
+        { title: "During the Disaster", desc: backendGuide.during.join(" ") },
+        { title: "After the Disaster", desc: backendGuide.after.join(" ") },
+      ];
+    });
+  } catch (err) {
+    // Falls back to the local step content already in CATEGORIES.
+  }
+}
+
+async function loadChecklistState() {
+  try {
+    const res = await api.getChecklist();
+    checkedItems = new Set(res.data.completed_indices || []);
+  } catch (err) {
+    checkedItems = new Set();
+  }
+}
 
 // ---------- Renderers ----------
 function renderCategoryTabs() {
@@ -245,8 +295,8 @@ function renderTimelineDetail() {
 
 function renderVideos() {
   document.getElementById("videoGrid").innerHTML = VIDEOS.map(
-    (v) => `
-      <div class="card card-hover video-card" style="padding:0;">
+    (v, i) => `
+      <div class="card card-hover video-card" style="padding:0; cursor:pointer;" data-i="${i}" role="button" tabindex="0">
         <div class="video-thumb">
           <span class="play-btn">${icon("play", 22)}</span>
           <span class="video-duration">${v.duration}</span>
@@ -254,6 +304,17 @@ function renderVideos() {
         <div class="video-title"><h4>${v.title}</h4></div>
       </div>`
   ).join("");
+
+  document.querySelectorAll("#videoGrid .video-card").forEach((card) => {
+    const open = () => {
+      const v = VIDEOS[parseInt(card.dataset.i, 10)];
+      window.open(v.url, "_blank", "noopener");
+    };
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    });
+  });
 }
 
 function renderChecklist() {
@@ -274,6 +335,9 @@ function renderChecklist() {
       else checkedItems.delete(i);
       row.classList.toggle("checked", input.checked);
       updateChecklistProgress();
+      api.updateChecklist(Array.from(checkedItems)).catch(() => {
+        api.showToast("Couldn't save checklist progress.", "warning");
+      });
     });
   });
 
@@ -316,23 +380,31 @@ function updateTipsCarousel() {
 
 function renderInfographics() {
   document.getElementById("infographicGrid").innerHTML = INFOGRAPHICS.map(
-    (info) => `
-      <div class="card card-hover infographic-card">
+    (info, i) => `
+      <div class="card card-hover infographic-card" style="cursor:pointer;" data-i="${i}" role="button" tabindex="0">
         <span class="info-icon" style="background:var(--color-${info.color === "emerald" ? "primary" : info.color === "blue" ? "secondary" : "warning"}-light); color:var(--color-${info.color === "emerald" ? "primary" : info.color === "blue" ? "secondary" : "warning"});">${icon(info.icon, 26)}</span>
         <h4>${info.title}</h4>
-        <p class="mt-2" style="font-size:0.85rem;">Illustrated quick-reference guide.</p>
+        <p class="mt-2" style="font-size:0.85rem;">Tap for the full quick-reference list.</p>
       </div>`
   ).join("");
+
+  document.querySelectorAll("#infographicGrid .infographic-card").forEach((card) => {
+    const open = () => openGuideModal(INFOGRAPHICS[parseInt(card.dataset.i, 10)]);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    });
+  });
 }
 
 function renderLearnMore() {
   document.getElementById("learnMoreGrid").innerHTML = LEARN_MORE.map(
-    (item) => `
-      <div class="card card-hover">
+    (item, i) => `
+      <a class="card card-hover" href="${item.url}" target="_blank" rel="noopener" style="display:block; text-decoration:none; color:inherit;" data-i="${i}">
         <span class="feature-icon blue" style="margin-bottom:var(--space-3);">${icon("info", 20)}</span>
         <h4>${item.title}</h4>
         <p class="mt-2" style="font-size:0.85rem;">${item.desc}</p>
-      </div>`
+      </a>`
   ).join("");
 }
 
@@ -352,9 +424,41 @@ function animateBars() {
   });
 }
 
+function openGuideModal(info) {
+  const modal = document.getElementById("guideModal");
+  document.getElementById("guideModalTitle").textContent = info.title;
+  document.getElementById("guideModalBody").innerHTML = `<ul style="padding-left:1.1rem; line-height:1.7;">${info.points.map((p) => `<li>${p}</li>`).join("")}</ul>`;
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function wireGuideModal() {
+  const modal = document.getElementById("guideModal");
+  const closeBtn = document.getElementById("guideModalClose");
+  if (!modal || !closeBtn) return;
+
+  closeBtn.innerHTML = icon("close", 18);
+
+  const shut = () => {
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+  };
+  closeBtn.addEventListener("click", shut);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) shut();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("open")) shut();
+  });
+}
+
 // ---------- Init ----------
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   initAppShell("guide", "Emergency Guide");
+
+  wireGuideModal();
+
+  await Promise.all([loadGuideContent(), loadChecklistState()]);
 
   renderCategoryTabs();
   renderSteps();

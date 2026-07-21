@@ -56,12 +56,18 @@ function buildSidebar(activeKey) {
         </div>
       </nav>
       <div class="sidebar-footer">
-        <span class="text-secondary">ResQ v1.0 &middot; Frontend Preview</span>
-      </div>
+  <span class="text-secondary">ResQ v1.0 &middot;</span>
+  <span class="text-secondary" style="display:block; margin-top:4px; font-size:0.75rem;">&copy; 2026 ResQ. All rights reserved. 🎀</span>
+</div>
     </aside>`;
 }
 
 function buildNavbar(pageTitle) {
+  const user = (typeof tokenStore !== "undefined" && tokenStore.getUser()) || null;
+  const initials = user && user.name
+    ? user.name.trim().split(/\s+/).slice(0, 2).map((w) => w[0].toUpperCase()).join("")
+    : "RS";
+
   return `
     <header class="navbar">
       <button class="icon-btn navbar-menu-toggle" id="mobileMenuToggle" aria-label="Open menu">
@@ -72,11 +78,11 @@ function buildNavbar(pageTitle) {
         <input type="search" placeholder="Search shelters, guides, alerts&hellip;" aria-label="Search ResQ" />
       </div>
       <div class="navbar-right">
-        <button class="icon-btn" aria-label="Notifications">
+        <button class="icon-btn" aria-label="Notifications" id="notifBtn">
           ${icon("bell", 20)}
-          <span class="notif-dot" aria-hidden="true"></span>
+          <span class="notif-dot" aria-hidden="true" id="notifDot" style="display:none;"></span>
         </button>
-        <a href="profile.html" class="avatar" aria-label="Your profile">RS</a>
+        <a href="profile.html" class="avatar" aria-label="Your profile">${initials}</a>
       </div>
     </header>`;
 }
@@ -92,10 +98,10 @@ function buildSOS() {
         <span class="badge badge-danger"><span class="badge-dot"></span>Emergency</span>
         <h3 id="sosTitle" class="mt-2">Need immediate help?</h3>
         <p class="mt-2">Choose an action below. This connects to live emergency services once ResQ is fully deployed.</p>
-        <button class="sos-action" type="button">${icon("phone", 20)}Call Emergency (112)</button>
-        <button class="sos-action" type="button">${icon("location", 20)}Share My Live Location</button>
-        <button class="sos-action" type="button">${icon("bell", 20)}Notify Emergency Contacts</button>
-        <button class="sos-action" type="button">${icon("tent", 20)}Find Nearest Shelter</button>
+        <button class="sos-action" type="button" data-sos-action="call">${icon("phone", 20)}Call Emergency (112)</button>
+        <button class="sos-action" type="button" data-sos-action="share_location">${icon("location", 20)}Share My Live Location</button>
+        <button class="sos-action" type="button" data-sos-action="notify_contacts">${icon("bell", 20)}Notify Emergency Contacts</button>
+        <button class="sos-action" type="button" data-sos-action="find_shelter">${icon("tent", 20)}Find Nearest Shelter</button>
       </div>
     </div>`;
 }
@@ -115,6 +121,54 @@ function initAppShell(activeKey, pageTitle) {
   wireSOS();
   wireMobileSidebar();
   wireMoreToggle();
+  wireNotifications();
+}
+
+async function wireNotifications() {
+  const dot = document.getElementById("notifDot");
+  if (!dot) return;
+  try {
+    const res = await api.getNotifications(true);
+    if (res.data && res.data.length > 0) dot.style.display = "block";
+  } catch {
+    // Silent — notification badge is non-critical UI.
+  }
+}
+
+/** Resolves { lat, lng } via browser geolocation, falling back to Jaipur. */
+function getUserLocation() {
+  const fallback = { lat: 26.9124, lng: 75.7873 };
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) return resolve(fallback);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => resolve(fallback),
+      { timeout: 4000 }
+    );
+  });
+}
+
+/**
+ * Callback-style geolocation helper used by pages with live map/weather
+ * widgets (dashboard, weather, shelter finder). Returns { latitude, longitude }
+ * to match the browser Geolocation API's own property names. Falls back to
+ * Jaipur if permission is denied or geolocation isn't available, so map/weather
+ * widgets always have coordinates to render instead of failing silently.
+ */
+function getCurrentLocation(callback, errorCallback) {
+  const fallback = { latitude: 26.9124, longitude: 75.7873 };
+  if (!navigator.geolocation) {
+    callback(fallback);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    (pos) => callback({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+    () => {
+      if (errorCallback) errorCallback();
+      else callback(fallback);
+    },
+    { timeout: 4000 }
+  );
 }
 
 function wireSOS() {
@@ -142,6 +196,41 @@ function wireSOS() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal.classList.contains("open")) shut();
   });
+
+  modal.querySelectorAll("[data-sos-action]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const action = btn.dataset.sosAction;
+      btn.disabled = true;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = `<span class="spinner-inline"></span>Working&hellip;`;
+      try {
+        const { lat, lng } = await getUserLocation();
+        const result = await api.triggerSOS(action, lat, lng);
+        if (action === "find_shelter" && result.data && result.data.nearest_shelter) {
+          api.showToast(`Nearest shelter: ${result.data.nearest_shelter.name} (${result.data.nearest_shelter.distance_km} km)`, "success");
+        } else if (action === "notify_contacts" || action === "share_location") {
+          const sent = result.data.emails_sent || 0;
+          const total = result.data.contacts_notified || 0;
+          if (total === 0) {
+            api.showToast("No emergency contacts saved yet. Add one in Profile.", "error");
+          } else if (sent > 0) {
+            api.showToast(`Notified ${sent} of ${total} emergency contact(s).`, "success");
+          } else {
+            api.showToast(`Saved contacts have no email on file — add one in Profile.`, "error");
+          }
+        } else if (action === "call") {
+          api.showToast(`Emergency number: ${result.data.emergency_number}`, "info");
+        } else {
+          api.showToast("Location logged.", "success");
+        }
+      } catch (err) {
+        api.showToast(err.message || "Couldn't complete that action. Try again.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    });
+  });
 }
 
 function wireMobileSidebar() {
@@ -162,6 +251,16 @@ function wireMoreToggle() {
     const isOpen = panel.classList.toggle("open");
     trigger.setAttribute("aria-expanded", String(isOpen));
   });
+
+  const logoutLink = panel.querySelector('[data-nav="logout"]');
+  if (logoutLink) {
+    logoutLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await api.logout();
+      tokenStore.clear();
+      window.location.href = "index.html";
+    });
+  }
 }
 
 /** Adds a lightweight ripple to any .btn on click (progressive enhancement). */
@@ -220,6 +319,74 @@ function animateCounters(selector = ".counter-num[data-target]") {
     { threshold: 0.4 }
   );
   counters.forEach((c) => observer.observe(c));
+}
+
+/**
+ * Queries the Overpass API (OpenStreetMap data) with automatic fallback
+ * across several public mirrors. The default overpass-api.de instance is
+ * free/shared and frequently returns 504 Gateway Timeout under load —
+ * trying alternates before giving up avoids that being a hard failure.
+ * Returns the parsed JSON response, or throws if every mirror fails.
+ */
+async function fetchOverpass(query) {
+  const mirrors = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.openstreetmap.ru/api/interpreter",
+  ];
+
+  let lastError;
+  for (const base of mirrors) {
+    try {
+      const response = await fetch(base + "?data=" + encodeURIComponent(query));
+      if (!response.ok) {
+        lastError = new Error(`Overpass mirror responded with ${response.status}`);
+        continue;
+      }
+      return await response.json();
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError || new Error("All Overpass mirrors failed");
+}
+
+/**
+ * Runs an Overpass QL query against the public Overpass API, trying
+ * several mirror servers in sequence with a per-request timeout.
+ * The main overpass-api.de instance is free/shared and frequently
+ * returns 504 Gateway Timeout under load, so this transparently
+ * falls back to alternate mirrors instead of failing on the first one.
+ * Returns the parsed JSON, or throws if every mirror fails.
+ */
+const OVERPASS_MIRRORS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.openstreetmap.ru/api/interpreter",
+];
+
+async function fetchOverpass(query, timeoutMs = 12000) {
+  let lastError;
+  for (const base of OVERPASS_MIRRORS) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(base + "?data=" + encodeURIComponent(query), {
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (!response.ok) {
+        lastError = new Error(`Overpass mirror ${base} returned ${response.status}`);
+        continue;
+      }
+      return await response.json();
+    } catch (err) {
+      clearTimeout(timer);
+      lastError = err;
+      // Try the next mirror.
+    }
+  }
+  throw lastError || new Error("All Overpass mirrors failed");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

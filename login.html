@@ -30,10 +30,14 @@
         <span class="brand-mark" id="formLogo"></span>
         <span class="brand-word">ResQ</span>
       </div>
-      <h2>Welcome back</h2>
-      <p class="mt-2" style="margin-bottom:var(--space-6);">Sign in to reach your dashboard, alerts, and nearest shelters.</p>
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="mt-2" style="margin-bottom:var(--space-6);" id="authSubtitle">Sign in to reach your dashboard, alerts, and nearest shelters.</p>
 
       <form id="loginForm" novalidate>
+        <div class="field" id="nameField" style="display:none;">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Your full name" autocomplete="name" />
+        </div>
         <div class="field">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required />
@@ -42,14 +46,14 @@
           <label for="password">Password</label>
           <input type="password" id="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" required />
         </div>
-        <div class="field-row">
+        <div class="field-row" id="rememberRow">
           <label class="checkbox-row">
             <input type="checkbox" name="remember" />
             Remember me
           </label>
-          <a href="#">Forgot password?</a>
+          <a href="#" id="forgotPasswordLink">Forgot password?</a>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="btn btn-primary btn-block" id="authSubmitBtn">Login</button>
       </form>
 
       <div class="divider">or continue with</div>
@@ -57,26 +61,111 @@
         <span id="googleIcon"></span> Continue with Google
       </button>
 
-      <p class="mt-6 text-secondary" style="text-align:center; font-size:0.88rem;">
-        Don't have an account? <a href="login.html" style="color:var(--color-secondary); font-weight:600;">Sign up</a>
+      <p class="mt-6 text-secondary" style="text-align:center; font-size:0.88rem;" id="authToggleRow">
+        Don't have an account? <a href="#" id="authToggleLink" style="color:var(--color-secondary); font-weight:600;">Sign up</a>
       </p>
     </div>
   </main>
 </div>
 
 <script src="js/icons.js"></script>
+<script src="js/api.js?v=2"></script>
 <script>
   document.getElementById("visualLogo").innerHTML = icon("shieldCheck", 30);
   document.getElementById("formLogo").innerHTML = icon("shieldCheck", 24);
   document.getElementById("googleIcon").innerHTML = icon("google", 18);
 
-  document.getElementById("loginForm").addEventListener("submit", function (e) {
+  // If already logged in, skip straight to the dashboard.
+  if (tokenStore.isLoggedIn()) {
+    window.location.href = "dashboard.html";
+  }
+
+  let mode = "login"; // "login" | "register"
+
+  const loginForm = document.getElementById("loginForm");
+  const submitBtn = document.getElementById("authSubmitBtn");
+  const nameField = document.getElementById("nameField");
+  const nameInput = document.getElementById("name");
+  const rememberRow = document.getElementById("rememberRow");
+
+  function setMode(next) {
+    mode = next;
+    const isRegister = mode === "register";
+    document.getElementById("authTitle").textContent = isRegister ? "Create your account" : "Welcome back";
+    document.getElementById("authSubtitle").textContent = isRegister
+      ? "Set up ResQ so help can reach you faster."
+      : "Sign in to reach your dashboard, alerts, and nearest shelters.";
+    nameField.style.display = isRegister ? "block" : "none";
+    nameInput.required = isRegister;
+    rememberRow.style.display = isRegister ? "none" : "flex";
+    submitBtn.textContent = isRegister ? "Create Account" : "Login";
+    document.getElementById("authToggleRow").innerHTML = isRegister
+      ? 'Already have an account? <a href="#" id="authToggleLink" style="color:var(--color-secondary); font-weight:600;">Log in</a>'
+      : 'Don\'t have an account? <a href="#" id="authToggleLink" style="color:var(--color-secondary); font-weight:600;">Sign up</a>';
+    document.getElementById("authToggleLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      setMode(isRegister ? "login" : "register");
+    });
+  }
+
+  document.getElementById("authToggleLink").addEventListener("click", (e) => {
     e.preventDefault();
-    // Frontend-only demo: no auth backend connected yet.
-    window.location.href = "dashboard.html";
+    setMode("register");
   });
-  document.getElementById("googleLoginBtn").addEventListener("click", function () {
-    window.location.href = "dashboard.html";
+
+  document.getElementById("forgotPasswordLink").addEventListener("click", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    if (!email) {
+      api.showToast("Enter your email above first, then click Forgot password.", "warning");
+      return;
+    }
+    try {
+      await api.forgotPassword(email);
+      api.showToast("If that email exists, a reset link has been sent.", "success");
+    } catch (err) {
+      api.showToast(err.message || "Couldn't process that request.", "error");
+    }
+  });
+
+  loginForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const rememberMe = loginForm.querySelector('input[name="remember"]').checked;
+
+    if (!email || !password || (mode === "register" && !nameInput.value.trim())) {
+      api.showToast("Please fill in all required fields.", "warning");
+      return;
+    }
+
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner-inline"></span>${mode === "register" ? "Creating account" : "Logging in"}&hellip;`;
+
+    try {
+      const res =
+        mode === "register"
+          ? await api.register({ name: nameInput.value.trim(), email, password })
+          : await api.login({ email, password, remember_me: rememberMe });
+      tokenStore.set(res.data.tokens.access_token, res.data.tokens.refresh_token, res.data.user);
+      api.showToast(`Welcome${mode === "register" ? "" : " back"}, ${res.data.user.name.split(" ")[0]}!`, "success");
+      setTimeout(() => (window.location.href = "dashboard.html"), 500);
+    } catch (err) {
+      api.showToast(err.message || "Something went wrong. Please try again.", "error");
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    }
+  });
+
+  document.getElementById("googleLoginBtn").addEventListener("click", async function () {
+    try {
+      // Architecture stub: a real integration exchanges a Google ID token here
+      // (e.g. via Google Identity Services) before calling api.googleLogin(idToken).
+      await api.googleLogin("stub-id-token");
+    } catch (err) {
+      api.showToast(err.message || "Google login isn't configured on this server yet.", "warning");
+    }
   });
 </script>
 </body>

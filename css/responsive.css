@@ -25,6 +25,8 @@
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
 
   .finder-layout { grid-template-columns: 1fr; }
+  #shelterMap { height: 360px; }
+  #serviceMap { height: 360px; }
   .chat-shell { grid-template-columns: 1fr; height: auto; }
   .suggested-panel { order: -1; }
 
@@ -89,6 +91,7 @@
 
   .chat-shell { height: calc(100vh - var(--navbar-height) - var(--space-4) * 2); }
   .msg { max-width: 92%; }
+  .chat-lang-select { max-width: 64px; }
 
   .sos-fab {
     right: var(--space-4);
