@@ -2,7 +2,6 @@
 ResQ is an AI-powered disaster management and emergency response platform designed to provide real-time assistance before, during, and after natural or human-made disasters.
 
 The platform combines Artificial Intelligence, FastAPI, MongoDB, Geolocation, Weather APIs, and Emergency Services into a single web application that helps users quickly 
-
 access emergency information, shelters, weather updates, AI guidance, and emergency contacts.
 
 ---
