@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = ["http://localhost:5500", "http://127.0.0.1:5500"]
 
     # --- MongoDB ---
-    MONGO_URI: str = "mongodb://localhost:27017"
+    MONGODB_URI: str = "mongodb://localhost:27017"
     MONGO_DB_NAME: str = "resq"
 
     # --- JWT ---
