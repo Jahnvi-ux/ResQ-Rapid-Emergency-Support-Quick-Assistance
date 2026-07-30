@@ -39,7 +39,15 @@ out;
 
 try{
 
-const data = await fetchOverpass(query);
+const response = await fetch(
+    `${API_BASE_URL}/nearby?lat=${lat}&lon=${lon}`
+);
+
+if (!response.ok) {
+    throw new Error("Failed to load nearby shelters");
+}
+
+const data = await response.json();
 
 console.log("Total Shelters:", data.elements.length);
 console.log(data.elements);

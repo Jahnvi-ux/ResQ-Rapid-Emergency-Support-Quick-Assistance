@@ -7,12 +7,15 @@ router = APIRouter(prefix="/nearby", tags=["Nearby"])
 async def get_nearby(lat: float = Query(...), lon: float = Query(...)):
     query = f"""
     [out:json][timeout:25];
-    (
-      node["amenity"="hospital"](around:15000,{lat},{lon});
-      node["amenity"="police"](around:15000,{lat},{lon});
-      node["amenity"="fire_station"](around:15000,{lat},{lon});
-      node["amenity"="shelter"](around:15000,{lat},{lon});
-    );
+    
+     (
+  node["amenity"="hospital"](around:15000,{lat},{lon});
+  node["amenity"="police"](around:15000,{lat},{lon});
+  node["amenity"="fire_station"](around:15000,{lat},{lon});
+  node["amenity"="shelter"](around:15000,{lat},{lon});
+  node["amenity"="community_centre"](around:15000,{lat},{lon});
+  node["amenity"="townhall"](around:15000,{lat},{lon});
+);
     out;
     """
 
