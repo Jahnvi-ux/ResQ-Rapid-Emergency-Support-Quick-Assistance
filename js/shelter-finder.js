@@ -39,9 +39,8 @@ out;
 
 try{
 
-const response = await fetch(
-    `${API_BASE_URL}/nearby?lat=${lat}&lon=${lon}`
-);
+const response = await fetch(`${API_BASE_URL}/nearby?lat=${lat}&lon=${lon}&type=shelter`)
+
 
 if (!response.ok) {
     throw new Error("Failed to load nearby shelters");
