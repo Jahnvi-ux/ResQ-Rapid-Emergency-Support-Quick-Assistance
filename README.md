@@ -233,6 +233,6 @@ Developed as an academic disaster management project using FastAPI, MongoDB, and
 
 - **Frontend & UI Design:** @Reeya0409
 - **Backend (JWT Authentication & MongoDB Atlas):** @Jahnvi-ux
-- **API Integration & AWS Deployment:** @Parul-kumari089
+- **API Integration & Render Deployment:** @Parul-kumari089
 
 ---
